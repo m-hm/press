@@ -5,14 +5,85 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>{{index .Config "title"}}</title>
+
+  <style>
+    section {
+      display: none;
+    }
+
+    body {
+      background-color: #f4f4c6;
+    }
+
+    #main {
+      max-width: 95%;
+      margin: 0 auto;
+    }
+
+    code,
+    pre {
+      font-family: 'JetBrains Mono Medium', monospace;
+    }
+
+    pre {
+      border-radius: 12px;
+      padding: 15px 10px;
+      max-width: 550px;
+      overflow-x: auto;
+    }
+
+    #status {
+      position: absolute;
+      bottom: 0;
+      width: 98%;
+      padding: 6px;
+    }
+
+    img {
+      max-width: 46%;
+      right: 4%;
+      position: absolute;
+      top: 5%;
+    }
+  </style>
 </head>
 
 <body>
-{{ range .Sections }}
-  <hr>
-  {{ . }}
-{{ end }}
+  <div id="main">
+    {{ range $k, $v := .Sections }}
+    <section id="sec{{ $k }}">
+      {{ $v }}
+    </section>
+    {{ end }}
+  </div>
+
+  <div id="status">
+    <span id="pager"></span>
+  </div>
+
+  <script>
+    const len = {{ .Len }};
+    let p = 1;
+
+    document.getElementById(`sec${p}`).style.display = 'block';
+    document.querySelector('#pager').innerHTML = `${p} / ${len}`
+
+    document.onkeydown = (e) => {
+      if (e.keyCode == 37 && p > 1) {
+        p--;
+      } else if (e.keyCode == 39 && p < len) {
+        p++;
+      }
+
+      document.querySelectorAll('section').forEach(x => {
+        x.style.display = 'none';
+      });
+
+      document.getElementById(`sec${p - 1}`).style.display = 'block';
+      document.querySelector('#pager').innerHTML = `${p} / ${len}`;
+    }
+  </script>
 </body>
 
 </html>

@@ -9,6 +9,7 @@ import (
 
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting"
+	"github.com/yuin/goldmark/extension"
 	"gopkg.in/yaml.v2"
 )
 
@@ -87,6 +88,7 @@ func parseYaml(x []byte) (map[string]interface{}, error) {
 func parseMarkdown(sections [][]byte, style string) ([]string, error) {
 	markdown := goldmark.New(
 		goldmark.WithExtensions(
+			extension.GFM,
 			highlighting.NewHighlighting(
 				highlighting.WithStyle(style),
 			),

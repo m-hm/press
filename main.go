@@ -15,7 +15,7 @@ import (
 
 func main() {
 	templateName := flag.String("t", "default.html", "template")
-	style := flag.String("s", "monokai", "style")
+	style := flag.String("s", "emacs", "style")
 	help := flag.Bool("h", false, "help")
 	flag.Parse()
 

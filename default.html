@@ -1,87 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="light">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{index .Config "title"}}</title>
-
   <style>
+    body, h1, h2, h3, h4, h6, h6, p {
+      font-family: 'DejaVu Sans';
+    }
+
+    body {
+      max-width: 95%;
+    }
+
+    .container-fluid {
+      width: 100%;
+      margin-right: auto;
+      margin-left: auto;
+      padding-right: 1rem;
+      padding-left: 1rem;
+    }
+
     section {
       display: none;
     }
 
-    body {
-      background-color: #f4f4c6;
-    }
-
-    #main {
-      max-width: 95%;
-      margin: 0 auto;
-    }
-
-    code,
-    pre {
+    code, pre {
       font-family: 'JetBrains Mono Medium', monospace;
+      padding: 10px;
+      max-width: 780px;
     }
 
-    pre {
-      border-radius: 12px;
-      padding: 15px 10px;
-      max-width: 550px;
-      overflow-x: auto;
-    }
-
-    #status {
+    #pager {
       position: absolute;
       bottom: 0;
-      width: 98%;
-      padding: 6px;
-    }
-
-    img {
-      max-width: 46%;
-      right: 4%;
-      position: absolute;
-      top: 5%;
     }
   </style>
 </head>
 
 <body>
-  <div id="main">
+  <main class="container-fluid">
     {{ range $k, $v := .Sections }}
     <section id="sec{{ $k }}">
       {{ $v }}
     </section>
     {{ end }}
-  </div>
-
-  <div id="status">
+  </main>
+  <footer class="container-fluid">
     <span id="pager"></span>
-  </div>
-
+  </footer>
   <script>
     const len = {{ .Len }};
-    let p = 1;
+    const lastPage = len - 1;
+    let p = 0;
 
     document.getElementById(`sec${p}`).style.display = 'block';
-    document.querySelector('#pager').innerHTML = `${p} / ${len}`
+    document.querySelector('#pager').innerHTML = `${p + 1} / ${len}`
 
     document.onkeydown = (e) => {
-      if (e.keyCode == 37 && p > 1) {
+      if (e.keyCode == 37 && p > 0) {
         p--;
-      } else if (e.keyCode == 39 && p < len) {
+      } else if (e.keyCode == 39 && p < lastPage) {
         p++;
       }
 
       document.querySelectorAll('section').forEach(x => {
         x.style.display = 'none';
       });
-
-      document.getElementById(`sec${p - 1}`).style.display = 'block';
-      document.querySelector('#pager').innerHTML = `${p} / ${len}`;
+      document.getElementById(`sec${p}`).style.display = 'block';
+      document.querySelector('#pager').innerHTML = `${p + 1} / ${len}`;
     }
   </script>
 </body>
